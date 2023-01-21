@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<style>
+	body {
+	    background-color:khaki;
+	}
+
+	#input-cell {
+	    width: 30px;
+	    height: 30px;
+	}
+
+	#output-cell {
+	    width: 34px;
+	    height: 34px;
+	}
+
+	table, td {
+	  border: 3px solid black;
+	  border-collapse: collapse;
+	}
+	.flex-container {
+	    display: flex;
+	    flex-direction: row;
+	}
+	.flex-container > div {
+	    width: 50%;
+	    display:flex;
+	    justify-content:center;
+	    align-items:center;
+	}
+	.submit-button {
+	    text-align: center;
+	}
+
+	</style>
+
+	<script>
+	    function createInputTable() {
+		const inputContainer = document.getElementById('input-container');
+		var sudokuInput = document.createElement("TABLE");
+		for (var i = 0; i < 9; i++) {
+		    var sudokuRow = sudokuInput.insertRow();
+		    for (var j = 0; j < 9; j++) {
+			var sudokuCell = sudokuRow.insertCell();
+
+			sudokuCell.innerHTML = 
+			    "<input type=\"number\" placeholder = \"X\" min=\"0\" max=\"9\" id=\"input-cell\"></input>";
+		    }
+		}
+		
+		inputContainer.appendChild(sudokuInput);
+	    }
+
+	    function createOutputTable() {
+		const outputContainer = document.getElementById('output-container');
+		var sudokuOutput = document.createElement("TABLE");
+		for (var i = 0; i < 9; i++) {
+		    var sudokuRow = sudokuOutput.insertRow();
+		    for (var j = 0; j < 9; j++) {
+			var sudokuCell = sudokuRow.insertCell();
+			sudokuCell.id = "output-cell";
+		    }
+		}
+		outputContainer.appendChild(sudokuOutput);
+	    }
+
+	    function getInput() {
+		//TODO
+	    }
+
+	    function writeSolution() {
+		//TODO
+	    }
+	</script>
+   </head>
+    <body>
+	<p>sudoku solver</p>
+	<p>by david</p>
+	<div class="flex-container">
+	    <div id="input-container"> 
+		<p>input:   </p>
+		<script>createInputTable()</script>
+	    </div>
+	    <div id= "output-container"> 
+		<p>solution:  </p>
+		<script>createOutputTable()</script>
+		<br>
+	    </div>
+	</div>
+	<div class="submit-button">
+	    <br><br><br> 
+	    <button onclick="getInput()">solve it</button>
+	</div>
+    </body>
+</html>
