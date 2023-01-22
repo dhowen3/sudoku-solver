@@ -6,14 +6,21 @@
 	    background-color:khaki;
 	}
 
-	#input-cell {
-	    width: 30px;
-	    height: 30px;
+	.input-cell {
+	    overflow : hidden;
+	    width: 44px;
+	    height: 44px;
 	}
 
-	#output-cell {
-	    width: 34px;
-	    height: 34px;
+	.output-cell {
+	    overflow : hidden;
+	    width: 44px;
+	    height: 44px;
+	}
+	input[type="number"] {
+	    width: 27px;
+	    justify-content:center;
+	    align-items:center;
 	}
 
 	table, td {
@@ -39,18 +46,27 @@
 	<script>
 	    function createInputTable() {
 		const inputContainer = document.getElementById('input-container');
-		var sudokuInput = document.createElement("TABLE");
+		var sudokuInputTable = document.createElement("TABLE");
 		for (var i = 0; i < 9; i++) {
-		    var sudokuRow = sudokuInput.insertRow();
+		    var sudokuRow = sudokuInputTable.insertRow();
 		    for (var j = 0; j < 9; j++) {
+			// sudokuCell is the parent of number-input
 			var sudokuCell = sudokuRow.insertCell();
-
-			sudokuCell.innerHTML = 
-			    "<input type=\"number\" placeholder = \"X\" min=\"0\" max=\"9\" id=\"input-cell\"></input>";
+			sudokuCell.id = "input-cell " + i + "," + j;
+			sudokuCell.classList.add("input-cell");
+			sudokuRow.appendChild(sudokuCell);
+			// number-input definitions start here
+			var inputField = document.createElement("input");
+			inputField.type = "number";
+			inputField.min = "0";
+			inputField.max = "9";
+			inputField.placeholder = "X";
+			inputField.id = "number-input " + i + "," + j;
+			sudokuCell.appendChild(inputField);
 		    }
 		}
 		
-		inputContainer.appendChild(sudokuInput);
+		inputContainer.appendChild(sudokuInputTable);
 	    }
 
 	    function createOutputTable() {
@@ -60,14 +76,22 @@
 		    var sudokuRow = sudokuOutput.insertRow();
 		    for (var j = 0; j < 9; j++) {
 			var sudokuCell = sudokuRow.insertCell();
-			sudokuCell.id = "output-cell";
+			sudokuCell.id = "output-cell " + i + "," + j;
+			sudokuCell.classList.add("output-cell");
 		    }
 		}
 		outputContainer.appendChild(sudokuOutput);
 	    }
 
 	    function getInput() {
-		//TODO
+		var csvRead = "";
+		for (let i = 0; i < 9; i++) {
+		    for (let j = 0; j<8; j++) {
+			csvRead += document.getElementById("number-input " + i + "," + j).value + ",";
+		    }
+		    csvRead += document.getElementById("number-input " + i + "," + 8).value + "\n";
+		}
+		console.log(csvRead);
 	    }
 
 	    function writeSolution() {
