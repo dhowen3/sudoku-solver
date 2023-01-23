@@ -23,10 +23,25 @@
 	    align-items:center;
 	}
 
-	table, td {
+	table {
 	  border: 3px solid black;
 	  border-collapse: collapse;
 	}
+	
+	td {
+	  border: 1px solid black;
+	  border-collapse: collapse;
+	}
+
+	.thick-right-border {
+	    border-right: 3px solid black;
+
+	}
+
+	.thick-bottom-border {
+	    border-bottom: 3px solid black;
+	}
+
 	.flex-container {
 	    display: flex;
 	    flex-direction: row;
@@ -49,12 +64,18 @@
 		var sudokuInputTable = document.createElement("TABLE");
 		for (var i = 0; i < 9; i++) {
 		    var sudokuRow = sudokuInputTable.insertRow();
+		    if (i == 2 || i == 5) {
+			sudokuRow.classList.add("thick-bottom-border");
+		    }
 		    for (var j = 0; j < 9; j++) {
 			// sudokuCell is the parent of number-input
 			var sudokuCell = sudokuRow.insertCell();
 			sudokuCell.id = "input-cell " + i + "," + j;
 			sudokuCell.classList.add("input-cell");
 			sudokuRow.appendChild(sudokuCell);
+			if (j == 2 || j == 5) {
+			    sudokuCell.classList.add("thick-right-border");
+			}
 			// number-input definitions start here
 			var inputField = document.createElement("input");
 			inputField.type = "number";
@@ -74,8 +95,14 @@
 		var sudokuOutput = document.createElement("TABLE");
 		for (var i = 0; i < 9; i++) {
 		    var sudokuRow = sudokuOutput.insertRow();
+		    if (i == 2 || i == 5) {
+			sudokuRow.classList.add("thick-bottom-border");
+		    }
 		    for (var j = 0; j < 9; j++) {
 			var sudokuCell = sudokuRow.insertCell();
+			if (j == 2 || j == 5) {
+			    sudokuCell.classList.add("thick-right-border");
+			}
 			sudokuCell.id = "output-cell " + i + "," + j;
 			sudokuCell.classList.add("output-cell");
 		    }
