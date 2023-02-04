@@ -13,15 +13,50 @@ struct undefinedCell {
 };
 
 
-void readFromCsv (char csvInput[]) { 
+char * readFromCsv (char * csvInput) { 
+    //TODO board array defined here
 }
 
-// TODO write tomorrow
-bool checkCsvForValidBoard() {
-    // TODO read from file to char[][]. split by \n
-    // TODO check that there are 9 commas on each line
-	// TODO also check in the same for-loop each character in CSV is either {[comma], [digit], or [\n]}
-    return false;
+
+bool checkCsvForValidBoard(char * csvInput) {
+    FILE *filePointer;
+    int maxLines = 9;
+    int maxLineLength = 19; // 9 commas + 9 digits + return
+    int currentCharValue, currentLineNum = 0, currentLinePosition = 0, currentCommaOnLine = 0;
+    filePointer = fopen(csvInput, "r");
+    char invalidErrorMessage[] = "invalid csv detected. terminating without result\n";
+    while(true) {
+	currentCharValue = fgetc(filePointer);
+	if (feof(filePointer)) break; // end of file character reached
+	else ++currentLinePosition;
+
+	if (currentLinePosition >= 19 || currentLineNum >= 9) {
+	    fclose(filePointer);
+	    printf(invalidErrorMessage); 
+	    return false;
+	}
+
+	if (currentCharValue == '\n') {
+	    currentLinePosition = 0;
+	    if (currentCommaOnLine != 8) {
+		printf(invalidErrorMessage); 
+		fclose(filePointer);
+		return false;
+	    }
+	    currentCommaOnLine = 0;
+	    ++currentLineNum;
+	} else if (currentCharValue == ',') {
+	    ++currentCommaOnLine;
+	} else if ('1' <= currentCharValue && currentCharValue <= '9') {
+	    //do nothing
+	} else {
+	    printf(invalidErrorMessage);
+	    fclose(filePointer);
+	    return false;
+	}
+    }
+    fclose(filePointer);
+    return true;
 }
 
 // runs a few checks to make sure filename passed in command-line arguments will not cause problems
@@ -36,26 +71,23 @@ bool checkProgramInput(int argc, char *argv[]) {
     }
     // check that the file passed to the program has a .csv extension
     {
+	int argumentLength = strlen(argv[1]);
 	int numPeriods = 0;
-	printf("ok"); //
-
-	for (int i = 0; i < strlen(argv[1]); i++) {
-	    int currentChar = argv[1][i];
-	    if (currentChar == '.') {
+	for (int i = 0; i < argumentLength; ++i) {
+	    if (argv[1][i] == '.') {
 		++numPeriods;
 	    }
 	}
-	printf("%d", numPeriods); //
 	if (numPeriods != 1) {
 	    printf("unexpected filetype passed to the program. ");
 	    printf("terminating without result\n");
 	    return false;
 	}
-	char * fileNameClone;
-	strcpy(argv[1],fileNameClone);
+
+	char fileNameClone[argumentLength];
+	strcpy(fileNameClone, argv[1]);
 	char *splitByPeriod = strtok(fileNameClone, ".");
-	splitByPeriod = strtok(NULL, "."); 
-	printf("%s", splitByPeriod); //
+	splitByPeriod = strtok(NULL, "."); // run a second time to get post-period token
 
 	int comparison = strcmp(splitByPeriod, "csv");
 	if (comparison != 0) {
@@ -70,6 +102,14 @@ bool checkProgramInput(int argc, char *argv[]) {
 int main(int argc, char *argv[]) {
     bool argsOk = checkProgramInput(argc, argv);
     if (!argsOk) return -1;
+    else csvFileName = argv[1];
+    //puts(csvFileName); debugging, delete
+
+    bool validBoard = checkCsvForValidBoard(csvFileName);
+    //if (!validBoard) return -1;
+
+    //readFromCsv(csvFileName);
+
     printf("args ok\n");
     return 0;
 }
